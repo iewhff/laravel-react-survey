@@ -4,6 +4,7 @@ import { Bars3Icon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { NavLink, Outlet } from 'react-router-dom'
 import { useStateContext } from '../contexts/ContextProvider'
 import { Navigate } from 'react-router-dom';
+import axiosClient from '../axios'
 
 const navigation = [
   { name: 'Dashboard', to: '/' },
@@ -15,7 +16,7 @@ function classNames(...classes) {
 }
 
 export default function DefaultLayout() {
-  const { currentUser, userToken } = useStateContext();
+  const { currentUser, userToken, setCurrentUser, setUserToken } = useStateContext();
 
 
   if (!userToken){
@@ -24,7 +25,10 @@ export default function DefaultLayout() {
 
   const logout = (ev) => {
     ev.preventDefault();
-    console.log('Logout');
+    axiosClient.post('/logout').then(() => {
+      setCurrentUser({});
+      setUserToken(null);
+    })
   };
 
 

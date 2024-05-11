@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axiosClient from '../axios.js';
 import { LockClosedIcon } from "@heroicons/react/20/solid";
+import { useStateContext } from '../contexts/ContextProvider.jsx';
 
 
 export default function Signup() {
-
+  const {setCurrentUser, setUserToken} = useStateContext();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,7 +25,8 @@ export default function Signup() {
         password_confirmation: passwordConfirmation,
       })
       .then(({data}) =>{
-        console.log(data);
+        setCurrentUser(data.user);
+        setUserToken(data.token);
       })
       .catch((error) => {
         if (error.response) {
@@ -67,7 +69,6 @@ export default function Signup() {
               <label htmlFor="full-name" className="sr-only">
                 Full Name
               </label>
-                {fullName}
               <input
                 id="full-name"
                 name="name"
